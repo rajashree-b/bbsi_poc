@@ -44,13 +44,13 @@ public class DataTransferService {
                 ));
             }
 
-            String selectMappingQuery = "SELECT * FROM osius.mappingtable";
+            String selectMappingQuery = "SELECT * FROM osius.mapping_table";
             ResultSet mappingsResultSet = statement.executeQuery(selectMappingQuery);
 
             List<MappingRule> mappings = new ArrayList<>();
             while (mappingsResultSet.next()) {
                 mappings.add(new MappingRule(
-                        mappingsResultSet.getString("source_column_name"),
+                        mappingsResultSet.getString("Welland_column"),
                         mappingsResultSet.getBoolean("is_secure"),
                         mappingsResultSet.getString("pattern")
                 ));
@@ -60,7 +60,7 @@ public class DataTransferService {
             StringBuilder insertScripts = new StringBuilder();
 
             for (MappingRule mapping : mappings) {
-                if (!mapping.isSecure && "pan".equals(mapping.sourceColumn)) {
+                if (mapping.isSecure && "pan".equals(mapping.Welland_Column)) {
                     for (EmployeeData employee : employees) {
                         String transformedPan = applyPattern(employee.pan, mapping.pattern);
                         if (transformedPan != null && !transformedPan.equals(employee.pan)) {
@@ -129,12 +129,12 @@ public class DataTransferService {
     }
 
     private static class MappingRule {
-        String sourceColumn;
+        String Welland_Column;
         boolean isSecure;
         String pattern;
 
-        MappingRule(String sourceColumn, boolean isSecure, String pattern) {
-            this.sourceColumn = sourceColumn;
+        MappingRule(String Welland_Column, boolean isSecure, String pattern) {
+            this.Welland_Column = Welland_Column;
             this.isSecure = isSecure;
             this.pattern = pattern;
         }
